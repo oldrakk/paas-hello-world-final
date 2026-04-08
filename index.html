@@ -3,47 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PaaS Live Demo Success 🚀</title>
+    <title>Інтегрований приклад: ООП, Web, Clean Code & PaaS</title>
     <style>
-        /* Мінімалістичний стильний дизайн */
+        /* --- CSS: СУЧАСНИЙ ВЕБ-ДИЗАЙН --- */
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f4f7f6;
+            --text-color: #333;
+            --success-color: #2ecc71;
+            --shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            background-color: #f4f7f6;
-            color: #333;
+            padding: 20px;
         }
-        .card {
+
+        .app-card {
             background: white;
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 500px;
             text-align: center;
-            max-width: 400px;
-            width: 90%;
         }
-        .icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            display: block;
+
+        .icon { font-size: 4rem; margin-bottom: 20px; display: block; }
+        h1 { margin: 0 0 10px 0; font-size: 2rem; color: #1a1a1a; }
+        .subtitle { color: #666; font-size: 1.1rem; margin-bottom: 30px; line-height: 1.5; }
+
+        /* Стилі для списку користувачів */
+        #user-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            text-align: left;
         }
-        h1 {
-            margin: 0 0 10px 0;
-            font-size: 2rem;
-            color: #1a1a1a;
+
+        .user-item {
+            background-color: #fff;
+            border: 1px solid #eee;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s ease;
         }
-        p {
-            margin: 0;
-            font-size: 1.1rem;
-            color: #666;
-            line-height: 1.5;
+
+        .user-item:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
+        .user-name { font-weight: bold; color: var(--primary-color); }
+        .user-role { font-size: 0.85rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Кнопка дії */
+        .action-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 4px 6px rgba(74, 144, 226, 0.2);
         }
-        .status {
+
+        .action-btn:hover { background-color: #357abd; }
+        .action-btn:active { transform: scale(0.98); }
+
+        /* Статус PaaS */
+        .status-badge {
             display: inline-block;
-            margin-top: 20px;
+            margin-top: 30px;
             padding: 8px 15px;
             background-color: #e6fffa;
             color: #047857;
@@ -54,11 +95,100 @@
     </style>
 </head>
 <body>
-    <div class="card">
-        <span class="icon">🚀</span>
-        <h1>Hello World! Оновлено через CD!🚀</h1>
-        <p>Це Live Demo роботи PaaS платформи успішно задеплоєно.</p>
-        <div class="status">Статус: Працює (Live)</div>
+
+    <div class="app-card">
+        <span class="icon">🎓</span>
+        <h1>Інтегрований приклад лекцій</h1>
+        <p class="subtitle">Демонстрація ООП, Чистого коду, Функціонального програмування та магії PaaS/CD.</p>
+
+        <ul id="user-list">
+            </ul>
+
+        <button class="action-btn" id="filter-btn">Показати лише Адмінів</button>
+
+        <div class="status-badge">Статус PaaS: Працює (Live) 🚀</div>
     </div>
+
+    <script>
+        /* --- JAVASCRIPT: ООП, ФУНКЦІОНАЛЬНЕ ПРОГРАМУВАННЯ, ЧИСТИЙ КОД --- */
+
+        // 1. КЛАС (ООП): Структура даних "Користувач"
+        // Демонструє: Класи, Інкапсуляцію, Чистий код (зрозумілі назви)
+        class User {
+            constructor(id, name, role) {
+                this.id = id;
+                this.name = name;
+                this.role = role; // наприклад: 'admin', 'user', 'guest'
+            }
+
+            // Метод для створення HTML-представлення користувача
+            createHtmlElement() {
+                const li = document.createElement('li');
+                li.className = 'user-item';
+                li.innerHTML = `
+                    <span class="user-name">${this.name}</span>
+                    <span class="user-role">${this.role}</span>
+                `;
+                return li;
+            }
+        }
+
+        // 2. ДАНІ: Масив об'єктів класів
+        const usersData = [
+            new User(1, 'Олексій Попов', 'admin'),
+            new User(2, 'Марія Іваненко', 'user'),
+            new User(3, 'Іван Петренко', 'admin'),
+            new User(4, 'Наталія Коваль', 'guest'),
+            new User(5, 'Сергій Бондар', 'user')
+        ];
+
+        // 3. ФУНКЦІЇ ОБРОБКИ (Функціональне програмування):
+        // Демонструє: Функції вищого порядку (filter, map, forEach), Чистий код (декларативний підхід)
+
+        const userListElement = document.getElementById('user-list');
+        const filterBtn = document.getElementById('filter-btn');
+        let isAdminFilterActive = false;
+
+        // Функція для рендерингу списку користувачів
+        // Приймає масив користувачів і відображає їх
+        function renderUserList(users) {
+            // Очищаємо поточний список (Чистий код: одна функція = одна відповідальність)
+            userListElement.innerHTML = '';
+
+            // Використовуємо forEach (Функціональний підхід) для додавання елементів
+            users.forEach(user => {
+                userListElement.appendChild(user.createHtmlElement());
+            });
+        }
+
+        // Функція для фільтрації та оновлення списку
+        function toggleAdminFilter() {
+            isAdminFilterActive = !isAdminFilterActive;
+
+            if (isAdminFilterActive) {
+                // ФІЛЬТРАЦІЯ (Функціональний підхід): map/filter
+                const adminUsers = usersData.filter(user => user.role === 'admin');
+                renderUserList(adminUsers);
+                filterBtn.textContent = 'Показати всіх користувачів';
+                filterBtn.style.backgroundColor = '#2ecc71'; // Змінюємо колір на зелений
+            } else {
+                renderUserList(usersData);
+                filterBtn.textContent = 'Показати лише Адмінів';
+                filterBtn.style.backgroundColor = '#4a90e2'; // Повертаємо синій
+            }
+        }
+
+        // 4. ІНІЦІАЛІЗАЦІЯ ТА ПОДІЇ (Web Tech):
+        // Початковий рендеринг
+        renderUserList(usersData);
+
+        // Додаємо обробник події кліку
+        filterBtn.addEventListener('click', toggleAdminFilter);
+
+        // 5. КОМЕНТАР ПРО GIT/PAAS/CD:
+        // Цей код готовий до деплою. Якщо ви зміните назву користувача в масиві `usersData`
+        // і зробите commit/push в GitHub, Vercel автоматично побачить зміни,
+        // перезбере проект і оновить сайт. Це і є CD в дії!
+    </script>
 </body>
 </html>
