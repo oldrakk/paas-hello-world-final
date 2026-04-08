@@ -3,192 +3,503 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Інтегрований приклад: ООП, Web, Clean Code & PaaS</title>
+    <title>Satellite Tracker Dashboard | Advanced PaaS Demo</title>
     <style>
-        /* --- CSS: СУЧАСНИЙ ВЕБ-ДИЗАЙН --- */
+        /* --- CSS: СКЛАДНИЙ ВЕБ-ДИЗАЙН (Grid, Flexbox, Animations) --- */
         :root {
-            --primary-color: #4a90e2;
-            --secondary-color: #f4f7f6;
-            --text-color: #333;
-            --success-color: #2ecc71;
-            --shadow: 0 10px 25px rgba(0,0,0,0.05);
+            --bg-color: #0b1120;
+            --card-bg: #161e31;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary: #38bdf8;
+            --accent: #f472b6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            --transition: all 0.3s ease;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--secondary-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             margin: 0;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
         }
 
-        .app-card {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
+        .dashboard {
             width: 100%;
-            max-width: 500px;
-            text-align: center;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto 1fr auto;
+            gap: 20px;
         }
 
-        .icon { font-size: 4rem; margin-bottom: 20px; display: block; }
-        h1 { margin: 0 0 10px 0; font-size: 2rem; color: #1a1a1a; }
-        .subtitle { color: #666; font-size: 1.1rem; margin-bottom: 30px; line-height: 1.5; }
-
-        /* Стилі для списку користувачів */
-        #user-list {
-            list-style: none;
-            padding: 0;
-            margin: 20px 0;
-            text-align: left;
-        }
-
-        .user-item {
-            background-color: #fff;
-            border: 1px solid #eee;
-            margin-bottom: 10px;
-            padding: 15px;
-            border-radius: 10px;
+        /* Хедер */
+        header {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: transform 0.2s ease;
         }
 
-        .user-item:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
-        .user-name { font-weight: bold; color: var(--primary-color); }
-        .user-role { font-size: 0.85rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        header h1 { margin: 0; font-size: 1.5rem; color: var(--primary); }
+        header p { margin: 5px 0 0 0; color: var(--text-muted); }
 
-        /* Кнопка дії */
-        .action-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            box-shadow: 0 4px 6px rgba(74, 144, 226, 0.2);
+        /* Панель управління */
+        .controls {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
-        .action-btn:hover { background-color: #357abd; }
-        .action-btn:active { transform: scale(0.98); }
-
-        /* Статус PaaS */
-        .status-badge {
-            display: inline-block;
-            margin-top: 30px;
-            padding: 8px 15px;
-            background-color: #e6fffa;
-            color: #047857;
-            border-radius: 20px;
-            font-weight: bold;
+        input, select, button {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #2d3748;
+            background: #1f293a;
+            color: var(--text-main);
             font-size: 0.9rem;
         }
+
+        button {
+            background-color: var(--primary);
+            color: #0b1120;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        button:hover { background-color: #7dd3fc; transform: translateY(-1px); }
+        button.secondary { background-color: #2d3748; color: var(--text-main); }
+        button.secondary:hover { background-color: #4a5568; }
+
+        /* Основна сітка супутників */
+        .satellite-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* Картка супутника */
+        .sat-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            border: 1px solid transparent;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sat-card:hover { border-color: var(--primary); transform: translateY(-3px); }
+
+        .sat-card h3 { margin: 0 0 10px 0; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
+        .sat-icon { font-size: 1.5rem; }
+
+        .sat-info {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .sat-info div span { font-weight: bold; color: var(--text-main); }
+
+        /* Статус бар */
+        .status-bar {
+            grid-column: 1 / -1;
+            height: 4px;
+            background: #2d3748;
+            margin-top: 15px;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .status-fill {
+            height: 100%;
+            background: var(--success);
+            border-radius: 2px;
+            transition: width 0.5s ease, background-color 0.3s ease;
+        }
+
+        .status-online { background-color: var(--success); }
+        .status-offline { background-color: var(--accent); }
+        .status-warning { background-color: var(--warning); }
+
+        /* Футер PaaS */
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            padding: 20px 0;
+            border-top: 1px solid #2d3748;
+        }
+
+        .paas-badge {
+            color: var(--success);
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Анімація додавання картки */
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .sat-card {
+            animation: fadeInScale 0.4s ease-out;
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="app-card">
-        <span class="icon">🎓</span>
-        <h1>Інтегрований приклад лекцій</h1>
-        <p class="subtitle">Демонстрація ООП, Чистого коду, Функціонального програмування та магії PaaS/CD.</p>
+    <div class="dashboard">
+        <header>
+            <div>
+                <h1>Satellite Tracker</h1>
+                <p>Панель моніторингу супутників в реальному часі</p>
+            </div>
+            <div id="stats">Завантаження...</div>
+        </header>
 
-        <ul id="user-list">
-            </ul>
+        <section class="controls">
+            <input type="text" id="sat-name" placeholder="Назва супутника (напр., Sentinel-6)">
+            <select id="sat-type">
+                <option value="Комунікаційний">Комунікаційний</option>
+                <option value="Навігаційний">Навігаційний</option>
+                <option value="Дослідницький">Дослідницький</option>
+            </select>
+            <button id="add-sat-btn">Додати супутник</button>
+            <button id="reset-btn" class="secondary">Скинути дані</button>
+        </section>
 
-        <button class="action-btn" id="filter-btn">Показати лише Адмінів</button>
+        <main class="satellite-grid" id="satellite-grid">
+            </main>
 
-        <div class="status-badge">Статус PaaS: Працює (Live) 🚀</div>
+        <footer>
+            <p>Advanced Integrated Demo for Masters 122/123. <br>
+               Deployed with <span class="paas-badge">PaaS Magic</span>. All Rights Reserved.</p>
+        </footer>
     </div>
 
     <script>
-        /* --- JAVASCRIPT: ООП, ФУНКЦІОНАЛЬНЕ ПРОГРАМУВАННЯ, ЧИСТИЙ КОД --- */
+        /* --- JAVASCRIPT: ADVANCED ARCHITECTURE, OOP, FP, ASYNC, CLEAN CODE --- */
 
-        // 1. КЛАС (ООП): Структура даних "Користувач"
-        // Демонструє: Класи, Інкапсуляцію, Чистий код (зрозумілі назви)
-        class User {
-            constructor(id, name, role) {
-                this.id = id;
+        // --- БЛОК 1: МОДЕЛІ ДАНИХ (ООП) ---
+
+        /**
+         * Базовий клас для будь-якого пристрою.
+         * Демонструє: Абстракцію, Інкапсуляцію, Чистий код.
+         */
+        class Device {
+            #id; // Приватне поле (Encapsulation)
+
+            constructor(name, type) {
+                this.#id = Date.now() + Math.random();
                 this.name = name;
-                this.role = role; // наприклад: 'admin', 'user', 'guest'
+                this.type = type;
+                this.status = 'offline'; // 'online', 'offline', 'maintenance'
+                this.lastUpdate = new Date();
             }
 
-            // Метод для створення HTML-представлення користувача
-            createHtmlElement() {
-                const li = document.createElement('li');
-                li.className = 'user-item';
-                li.innerHTML = `
-                    <span class="user-name">${this.name}</span>
-                    <span class="user-role">${this.role}</span>
+            getId() { return this.#id; }
+
+            /**
+             * Оновлює статус пристрою.
+             * @param {string} newStatus - Новий статус ('online', 'offline', etc.)
+             */
+            setStatus(newStatus) {
+                this.status = newStatus;
+                this.lastUpdate = new Date();
+            }
+        }
+
+        /**
+         * Клас Супутник, що успадковує Device.
+         * Демонструє: Успадкування, Поліморфізм, Розширення моделі.
+         */
+        class Satellite extends Device {
+            constructor(name, type, orbitAlt, telemetry) {
+                super(name, type); // Виклик конструктора базового класу
+                this.orbitAlt = orbitAlt; // Висота орбіти (км)
+                this.telemetry = telemetry; // Об'єкт з даними (fuel, temp, latency)
+                this.position = { lat: 0, lng: 0 }; // Поточна позиція
+            }
+
+            /**
+             * Оновлює телеметрію супутника.
+             * @param {Object} data - Нові дані телеметрії.
+             */
+            updateTelemetry(data) {
+                this.telemetry = { ...this.telemetry, ...data }; // Спред-оператор
+                this.lastUpdate = new Date();
+                // Логіка автоматичної зміни статусу
+                if (this.telemetry.fuel < 10) this.setStatus('maintenance');
+                else if (this.telemetry.latency > 500) this.setStatus('warning');
+                else this.setStatus('online');
+            }
+
+            /**
+             * Імітує отримання позиції з API.
+             * Демонструє: Асинхронність (Promises).
+             * @returns {Promise<Object>} - Проміс з позицією.
+             */
+            async fetchCurrentPosition() {
+                // Імітуємо затримку мережі
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        this.position = {
+                            lat: (Math.random() * 180 - 90).toFixed(4),
+                            lng: (Math.random() * 360 - 180).toFixed(4)
+                        };
+                        resolve(this.position);
+                    }, Math.random() * 1000 + 500); // Затримка 0.5 - 1.5 сек
+                });
+            }
+        }
+
+
+        // --- БЛОК 2: СХОВИЩЕ ДАНИХ (Pattern OBSERVER) ---
+
+        /**
+         * Клас, що керує списком супутників та оповіщає підписників про зміни.
+         * Демонструє: Патерн Observer, LocalStorage, Чистий код (SRP).
+         */
+        class SatelliteStore {
+            constructor() {
+                this.satellites = this.#loadFromLocalStorage();
+                this.observers = []; // Список функцій-спостерігачів
+            }
+
+            // Додати спостерігача
+            subscribe(observer) { this.observers.push(observer); }
+
+            // Оповістити всіх про зміни
+            #notify() {
+                this.#saveToLocalStorage();
+                this.observers.forEach(observer => observer(this.satellites));
+            }
+
+            addSatellite(sat) {
+                this.satellites.push(sat);
+                this.#notify();
+            }
+
+            removeSatellite(id) {
+                this.satellites = this.satellites.filter(s => s.getId() !== id);
+                this.#notify();
+            }
+
+            reset() {
+                this.satellites = [];
+                this.#notify();
+                localStorage.removeItem('satellites_data');
+            }
+
+            // Методи для LocalStorage
+            #saveToLocalStorage() {
+                // Зберігаємо лише чисті дані, без методів класу
+                localStorage.setItem('satellites_data', JSON.stringify(this.satellites));
+            }
+
+            #loadFromLocalStorage() {
+                const data = localStorage.getItem('satellites_data');
+                if (!data) return [];
+                const rawSats = JSON.stringify(data);
+                // Відновлюємо екземпляри класу Satellite з сирих даних (hydration)
+                return rawSats.map(s => {
+                    const sat = new Satellite(s.name, s.type, s.orbitAlt, s.telemetry);
+                    // Відновлюємо приватний ID та інші поля
+                    Object.assign(sat, s);
+                    return sat;
+                });
+            }
+        }
+
+
+        // --- БЛОК 3: UI-КОМПОНЕНТИ ТА РЕНДЕРИНГ (WEB TECH) ---
+
+        const gridElement = document.getElementById('satellite-grid');
+        const statsElement = document.getElementById('stats');
+
+        /**
+         * Компонент картки супутника.
+         * Демонструє: Створення DOM, Шаблонні рядки, Динамічні стилі.
+         */
+        class SatelliteCardComponent {
+            constructor(satellite, onRemove) {
+                this.sat = satellite;
+                this.onRemove = onRemove;
+                this.element = this.#createHtml();
+            }
+
+            #createHtml() {
+                const card = document.createElement('div');
+                card.className = `sat-card status-${this.sat.status}`;
+
+                const iconMap = {
+                    'Комунікаційний': '📡',
+                    'Навігаційний': '🗺️',
+                    'Дослідницький': '🔬'
+                };
+
+                const statusClassMap = {
+                    'online': 'status-online',
+                    'offline': 'status-offline',
+                    'warning': 'status-warning',
+                    'maintenance': 'status-warning'
+                };
+
+                card.innerHTML = `
+                    <h3>
+                        <span class="sat-icon">${iconMap[this.sat.type] || '🛰️'}</span>
+                        ${this.sat.name}
+                        <button class="secondary remove-btn" style="position: absolute; top: 10px; right: 10px; padding: 5px 10px; font-size: 0.8rem;">×</button>
+                    </h3>
+                    <div class="sat-info">
+                        <div>Тип: <span>${this.sat.type}</span></div>
+                        <div>Орбіта: <span>${this.sat.orbitAlt} км</span></div>
+                        <div>Паливо: <span>${this.sat.telemetry.fuel}%</span></div>
+                        <div>Темп: <span>${this.sat.telemetry.temp}°C</span></div>
+                        <div style="grid-column: 1 / -1;">Позиція: <span class="pos-text">Завантаження...</span></div>
+                    </div>
+                    <div class="status-bar">
+                        <div class="status-fill ${statusClassMap[this.sat.status]}" style="width: ${this.sat.status === 'online' ? '100%' : '30%'}"></div>
+                    </div>
                 `;
-                return li;
+
+                // Обробник видалення
+                card.querySelector('.remove-btn').addEventListener('click', () => {
+                    this.onRemove(this.sat.getId());
+                });
+
+                // Асинхронне оновлення позиції
+                this.#updatePositionAsync(card);
+
+                return card;
+            }
+
+            async #updatePositionAsync(cardElement) {
+                const posTextElement = cardElement.querySelector('.pos-text');
+                try {
+                    const pos = await this.sat.fetchCurrentPosition(); // Асинхронний виклик
+                    posTextElement.textContent = `${pos.lat}, ${pos.lng}`;
+                } catch (error) {
+                    posTextElement.textContent = 'Помилка API';
+                    console.error(error);
+                }
             }
         }
 
-        // 2. ДАНІ: Масив об'єктів класів
-        const usersData = [
-            new User(1, 'Олексій Попов', 'admin'),
-            new User(2, 'Марія Іваненко', 'user'),
-            new User(3, 'Іван Петренко', 'admin'),
-            new User(4, 'Наталія Коваль', 'guest'),
-            new User(5, 'Сергій Бондар', 'user')
-        ];
 
-        // 3. ФУНКЦІЇ ОБРОБКИ (Функціональне програмування):
-        // Демонструє: Функції вищого порядку (filter, map, forEach), Чистий код (декларативний підхід)
+        // --- БЛОК 4: КОНТРОЛЕР ТА ІНІЦІАЛІЗАЦІЯ (DEV OPS / PAAS READY) ---
 
-        const userListElement = document.getElementById('user-list');
-        const filterBtn = document.getElementById('filter-btn');
-        let isAdminFilterActive = false;
+        const store = new SatelliteStore();
 
-        // Функція для рендерингу списку користувачів
-        // Приймає масив користувачів і відображає їх
-        function renderUserList(users) {
-            // Очищаємо поточний список (Чистий код: одна функція = одна відповідальність)
-            userListElement.innerHTML = '';
+        // 1. Функція рендерингу всього UI (Декларативний підхід)
+        // Демонструє: Функціональне програмування (map, reduce), Чистий код.
+        function renderUI(satellites) {
+            // Очищаємо гріду
+            gridElement.innerHTML = '';
 
-            // Використовуємо forEach (Функціональний підхід) для додавання елементів
-            users.forEach(user => {
-                userListElement.appendChild(user.createHtmlElement());
+            // Рендеримо картки
+            satellites.forEach(sat => {
+                const component = new SatelliteCardComponent(sat, id => store.removeSatellite(id));
+                gridElement.appendChild(component.element);
             });
+
+            // Оновлюємо статистику (Функціональний підхід: map/reduce)
+            const stats = satellites.reduce((acc, sat) => {
+                acc.total++;
+                acc[sat.status] = (acc[sat.status] || 0) + 1;
+                acc.fuelTotal += sat.telemetry.fuel;
+                return acc;
+            }, { total: 0, online: 0, offline: 0, warning: 0, maintenance: 0, fuelTotal: 0 });
+
+            const avgFuel = stats.total > 0 ? (stats.fuelTotal / stats.total).toFixed(1) : 0;
+
+            statsElement.innerHTML = `
+                Всього: <span>${stats.total}</span> |
+                Online: <span style="color:var(--success)">${stats.online}</span> |
+                Avg Fuel: <span>${avgFuel}%</span>
+            `;
         }
 
-        // Функція для фільтрації та оновлення списку
-        function toggleAdminFilter() {
-            isAdminFilterActive = !isAdminFilterActive;
+        // 2. Підписуємо UI на зміни в сторі (Observer Pattern)
+        store.subscribe(renderUI);
 
-            if (isAdminFilterActive) {
-                // ФІЛЬТРАЦІЯ (Функціональний підхід): map/filter
-                const adminUsers = usersData.filter(user => user.role === 'admin');
-                renderUserList(adminUsers);
-                filterBtn.textContent = 'Показати всіх користувачів';
-                filterBtn.style.backgroundColor = '#2ecc71'; // Змінюємо колір на зелений
-            } else {
-                renderUserList(usersData);
-                filterBtn.textContent = 'Показати лише Адмінів';
-                filterBtn.style.backgroundColor = '#4a90e2'; // Повертаємо синій
-            }
+        // 3. Ініціалізація початковими даними (якщо LocalStorage порожній)
+        if (store.satellites.length === 0) {
+            const sat1 = new Satellite('Starlink-101', 'Комунікаційний', 550, { fuel: 85, temp: 22, latency: 45 });
+            sat1.setStatus('online');
+            store.addSatellite(sat1);
+
+            const sat2 = new Satellite('Galileo-24', 'Навігаційний', 23222, { fuel: 92, temp: -15, latency: 120 });
+            sat2.setStatus('online');
+            store.addSatellite(sat2);
+
+            const sat3 = new Satellite('Hubble Space Telescope', 'Дослідницький', 540, { fuel: 5, temp: 10, latency: 800 });
+            // Автоматично змінить статус на warning через низьке паливо
+            store.addSatellite(sat3);
+        } else {
+            // Рендеримо завантажені дані
+            renderUI(store.satellites);
         }
 
-        // 4. ІНІЦІАЛІЗАЦІЯ ТА ПОДІЇ (Web Tech):
-        // Початковий рендеринг
-        renderUserList(usersData);
 
-        // Додаємо обробник події кліку
-        filterBtn.addEventListener('click', toggleAdminFilter);
+        // 4. Обробники подій (Web Tech)
+        document.getElementById('add-sat-btn').addEventListener('click', () => {
+            const nameInput = document.getElementById('sat-name');
+            const typeInput = document.getElementById('sat-type');
+
+            if (nameInput.value.trim() === '') { alert('Введіть назву супутника!'); return; }
+
+            const newSat = new Satellite(
+                nameInput.value,
+                typeInput.value,
+                (Math.random() * 1000 + 300).toFixed(0), // Висота
+                { fuel: 100, temp: 25, latency: 50 } // Телеметрія
+            );
+            newSat.setStatus('offline'); // Початковий статус
+
+            store.addSatellite(newSat);
+
+            // Очищаємо поля
+            nameInput.value = '';
+        });
+
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            store.reset();
+        });
 
         // 5. КОМЕНТАР ПРО GIT/PAAS/CD:
-        // Цей код готовий до деплою. Якщо ви зміните назву користувача в масиві `usersData`
-        // і зробите commit/push в GitHub, Vercel автоматично побачить зміни,
-        // перезбере проект і оновить сайт. Це і є CD в дії!
+        // Цей код демонструє сучасний підхід до розробки. Зміна будь-якого параметра,
+        // наприклад, порогового значення latency для статусу 'warning' у методі `updateTelemetry`,
+        // після commit/push в GitHub призведе до автоматичного передеплою на Vercel.
+        // Це і є Continuous Delivery, який абстрагує Паас.
     </script>
 </body>
 </html>
