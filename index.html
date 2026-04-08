@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaaS Live Demo Success 🚀</title>
+    <style>
+        /* Мінімалістичний стильний дизайн */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+        h1 {
+            margin: 0 0 10px 0;
+            font-size: 2rem;
+            color: #1a1a1a;
+        }
+        p {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.5;
+        }
+        .status {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 15px;
+            background-color: #e6fffa;
+            color: #047857;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <span class="icon">🚀</span>
+        <h1>Hello World!</h1>
+        <p>Це Live Demo роботи PaaS платформи успішно задеплоєно.</p>
+        <div class="status">Статус: Працює (Live)</div>
+    </div>
+</body>
+</html>
